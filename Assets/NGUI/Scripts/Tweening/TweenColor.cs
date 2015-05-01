@@ -81,4 +81,18 @@ public class TweenColor : UITweener
 		}
 		return comp;
 	}
+
+	static public TweenColor Begin2 (GameObject go, float duration, Color from, Color to)
+	{
+		TweenColor comp = UITweener.Begin<TweenColor>(go, duration);
+		comp.from = from;
+		comp.to = to;
+		
+		if (duration <= 0f)
+		{
+			comp.Sample(1f, true);
+			comp.enabled = false;
+		}
+		return comp;
+	}
 }
