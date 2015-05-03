@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 public class GameMain : MonoBehaviour {
 
@@ -24,53 +27,64 @@ public class GameMain : MonoBehaviour {
 	public GameState m_GameState = GameState.HOME;
 
 	public float m_StartTime = 0.0f;
-	public float m_TimeLimit = 30.0f;
-	public float m_TimeSpan = 1.0f;
-	public float m_DeadLine = 30.0f;
+	public float m_TimeLimit;// = 30.0f;
+	public float m_TimeSpan;// = 1.0f;
+	public float m_DeadLine;// = 30.0f;
 	public int m_Count = 0;
 	public UISlider m_Slider;
+	public UISprite m_SliderSprite;
 
 	int SX = Screen.width;
 	int SY = Screen.height;
 	GUIStyle tStyle = new GUIStyle();
 	GUIStyle cStyle = new GUIStyle();
 
-	public Dictionary<GameState,GameObject> gameObjects = new Dictionary<GameState, GameObject>();
+	public Dictionary<Rainbow,GameObject> spotObjects = new Dictionary<Rainbow, GameObject>();
 
 	// Use this for initialization
 	void Start () {
 
-		DontDestroyOnLoad(gameObject);
+	}
 
-		gameObjects.Add(GameState.HOME,GameObject.Find("HomeUI"));
-		gameObjects.Add(GameState.INGAME,GameObject.Find("GameUI"));
-		gameObjects.Add(GameState.FINISH,GameObject.Find("ResultUI"));
+	public void Init() {
+		
+		GameObject[] gos = GameObject.FindGameObjectsWithTag("spot");
+		foreach ( GameObject go in gos ) {
+			spotObjects.Add(ColorEx.GetRainbow(go.name), go);
+		}
 
-		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
-
+#if UNITY_EDITOR
 		GoHome();
-
+#else
+		PlayGamesPlatform.DebugLogEnabled = true;
+		PlayGamesPlatform.Activate();
+		Social.localUser.Authenticate((bool success) => {
+			if ( success )
+				GoHome();
+			else {
+				Debug.Log("!success");
+				PlayGamesPlatform.Instance.SignOut();
+			}
+		});
+#endif
 		cStyle.normal.textColor = Color.black;
 		cStyle.alignment = TextAnchor.MiddleRight;
 		cStyle.fontSize = 80*Screen.height/720;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if ( m_GameState == GameState.INGAME )
 			CountDown();
-	}
 
-//	void OnLevelWasLoaded(int level) {
-//		if (level == 1) {
-//			if ( !gameObjects.ContainsKey("ResultUI") )
-//				gameObjects.Add("ResultUI",GameObject.Find("ResultUI"));
-//			if ( !gameObjects.ContainsKey("GameUI") )
-//				gameObjects.Add("GameUI",GameObject.Find("GameUI"));
-//			m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
-//			gameObjects["ResultUI"].SetActive(false);			                        
-//		}
-//	}
+		if (Application.platform == RuntimePlatform.Android)
+		{	
+			if (Input.GetKey(KeyCode.Escape))
+			{
+				PauseGame();
+			}
+		}  
+	}
 
 	void CountDown() {
 		if ( Time.time - m_StartTime > m_TimeLimit ) { 
@@ -80,13 +94,15 @@ public class GameMain : MonoBehaviour {
 		} else {
 			m_DeadLine = m_TimeLimit - (Time.time - m_StartTime);
 			m_Slider.value = m_DeadLine / m_TimeLimit;
+			m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
 		}
 	}
 
 	public void NewGame() {
-		gameObjects[GameState.HOME].SetActive(false);	
-		gameObjects[GameState.INGAME].SetActive(true);	
-		gameObjects[GameState.FINISH].SetActive(false);	
+		GUI_Mgr.Instance.NewGame();
+
+		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
+		m_SliderSprite = GameObject.Find("FG").GetComponent<UISprite>();
 
 		m_StartTime = Time.time;
 		m_Count = 0;
@@ -94,21 +110,49 @@ public class GameMain : MonoBehaviour {
 	}
 
 	public void GoHome() {
-		gameObjects[GameState.HOME].SetActive(true);	
-		gameObjects[GameState.INGAME].SetActive(false);	
-		gameObjects[GameState.FINISH].SetActive(false);	
+		GUI_Mgr.Instance.GoHome();
 
 		m_GameState = GameState.HOME;
 	}
 
 	public void ShowResult() {
-		gameObjects[GameState.HOME].SetActive(false);	
-		gameObjects[GameState.INGAME].SetActive(true);	
-		gameObjects[GameState.FINISH].SetActive(true);	
-		
+		GUI_Mgr.Instance.ShowResult();
+
+		UILabel score = GameObject.Find("Label_Count").GetComponent<UILabel>();
+		score.text = m_Count.ToString();
 		m_GameState = GameState.FINISH;
+
+#if !UNITY_EDITOR
+		Social.ReportScore(m_Count, "CgkItIOIzdQOEAIQAQ", (bool success) => {
+			// handle success or failure
+		});
+#endif
 	}
 
+	public void PauseGame() {
+		GUI_Mgr.Instance.PauseGame();
+		
+		Time.timeScale = 0;
+		m_GameState = GameState.PAUSE;
+	}
+	
+	public void ResumeGame() {
+		GUI_Mgr.Instance.ResumeGame();
+		
+		Time.timeScale = 1;
+		m_GameState = GameState.INGAME;
+	}
+	
+	public void RePositionSpots() {
+		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
+			kvp.Value.transform.position = new Vector3(-1000,-1000,0);
+		}
+
+		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
+			kvp.Value.GetComponent<Spot>().Init();
+		}
+	}
+	
 	void ShowUI() {
 		GUI.Label(new Rect(SX/2, 0, SX/2, SY/10), string.Format("{0:D}",m_Count), cStyle);
 	}
