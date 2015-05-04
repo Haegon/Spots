@@ -8,6 +8,7 @@ public enum GameState {
 	FINISH,
 	OPTION,
 	PAUSE,
+	NONE,
 }
 
 public enum Rainbow {

@@ -1,3 +1,6 @@
 lastUpgrade=00910
 proj.AppId=503746527668
 android.SetupDone=true
+ios.ClientId=503746527668-ru8m8mujvrvjuam1sg7lo3fk9ebsfc3a.apps.googleusercontent.com
+ios.BundleId=com.ncrewent.inapp
+ios.SetupDone=true

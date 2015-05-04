@@ -14,7 +14,7 @@ public static class GameInfo {
     private const string UnescapedIosClientId = "CLIENTID";
 
     public const string ApplicationId = "503746527668"; // Filled in automatically
-    public const string IosClientId = "__CLIENTID__"; // Filled in automatically
+    public const string IosClientId = "503746527668-ru8m8mujvrvjuam1sg7lo3fk9ebsfc3a.apps.googleusercontent.com"; // Filled in automatically
 
     public static bool ApplicationIdInitialized() {
         return !ApplicationId.Equals(ToEscapedToken(UnescapedApplicationId));
