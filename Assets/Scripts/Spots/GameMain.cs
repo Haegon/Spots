@@ -127,6 +127,9 @@ public class GameMain : Fibra {
 				case GameState.INGAME :
 					PauseGame();
 					break;
+				case GameState.READY :
+					PauseGame();
+					break;
 				case GameState.PAUSE :
 					ResumeGame();
 					break;
@@ -144,19 +147,30 @@ public class GameMain : Fibra {
 			ShowResult();		
 		} else {
 			m_DeadLine = m_TimeLimit - (Time.time - m_StartTime);
-			m_Slider.value = m_DeadLine / m_TimeLimit;
-			m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
+			ShowSlider();
 		}
+	}
+
+	public void ShowSlider() {
+		m_Slider.value = m_DeadLine / m_TimeLimit;
+		m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
 	}
 
 	public void NewGame() {
 		Time.timeScale = 1.0f;
-		GUI_Mgr.Instance.NewGame();
-
-		m_StartTime = Time.time;
+		m_Count = 0;
 		m_TimeLimit = m_StaticTimeLimit;
 		m_DeadLine = m_StaticTimeLimit;
-		m_Count = 0;
+
+		GUI_Mgr.Instance.NewGame();
+		ShowSlider();
+
+		m_GameState = GameState.READY;
+	}
+
+	public void StartGame() {
+		
+		m_StartTime = Time.time;
 		m_GameState = GameState.INGAME;
 	}
 
@@ -197,7 +211,9 @@ public class GameMain : Fibra {
 		GUI_Mgr.Instance.ResumeGame();
 		
 		Time.timeScale = 1;
-		m_GameState = GameState.INGAME;
+
+		if ( m_Count > 0 ) m_GameState = GameState.INGAME;
+		else m_GameState = GameState.READY;
 	}
 	
 	public void Option() {
@@ -212,7 +228,7 @@ public class GameMain : Fibra {
 		}
 
 		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
-			kvp.Value.GetComponent<Spot>().Init();
+			kvp.Value.GetComponent<Spot>().RePositionSpot();
 		}
 	}
 	
@@ -221,7 +237,7 @@ public class GameMain : Fibra {
 	}
 
 	void OnGUI () {
-		if ( m_GameState == GameState.INGAME )
+		if ( m_GameState == GameState.INGAME || m_GameState == GameState.READY)
 			ShowUI();	
 	}
 

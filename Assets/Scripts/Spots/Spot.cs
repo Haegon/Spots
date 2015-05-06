@@ -14,14 +14,14 @@ public class Spot : MonoBehaviour {
 		sprite = child.GetComponent<UISprite>();
 		sprite.color = ColorEx.SpotColor(gameObject.name);
 		startColor = ColorEx.SpotColor(gameObject.name);
-		Init();
+		RePositionSpot();
 	}
 
 		
 	void Update () {
 		sprite.color = ColorEx.SpotColor(gameObject.name);
 		if ( Time.time > timeNow + GameMain.Instance.m_TimeSpan && GameMain.Instance.m_GameState == GameState.INGAME ) {
-			Init();
+			RePositionSpot();
 		}
 
 //		UIButton btn = gameObject.GetComponent<UIButton>();
@@ -31,7 +31,7 @@ public class Spot : MonoBehaviour {
 //		btn.disabledColor = btn.defaultColor;
 	}
 
-	public void Init() {
+	public void RePositionSpot() {
 		timeNow = Time.time;
 
 		Random.seed = Utils.GetRandomNumber(1,100000);
@@ -50,7 +50,7 @@ public class Spot : MonoBehaviour {
 	bool checkFar(GameObject[] gos, Vector3 v) {
 		foreach ( GameObject go in gos ) {
 			if ( go.name == gameObject.name ) continue;
-				if ( Vector3.Distance(v,go.transform.position) < 0.15f ) {
+				if ( Vector3.Distance(v,go.transform.position) < 0.2f ) {
 					return false;
 			}
 		}

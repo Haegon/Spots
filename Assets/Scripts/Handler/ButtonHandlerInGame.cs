@@ -4,6 +4,14 @@ using System.Collections;
 public class ButtonHandlerInGame : MonoBehaviour {
 
 	public void Button_Spot() {
+		if ( GameMain.Instance.m_GameState == GameState.READY ) { 
+			if ( GameMain.Instance.m_Count == 0 ) {
+				GameMain.Instance.StartGame();
+				GameMain.Instance.m_Count ++;
+				GameMain.Instance.RePositionSpots();
+			}
+		}
+
 		if ( GameMain.Instance.m_GameState == GameState.INGAME ) { 
 			if ( GameMain.Instance.m_Count % 7 == (int)ColorEx.GetRainbow(this.gameObject.name) ) {
 				if ( GameMain.Instance.m_Count % 7 == (int)Rainbow.VIOLET ) {
@@ -32,7 +40,8 @@ public class ButtonHandlerInGame : MonoBehaviour {
 	}
 
 	public void Button_Pause() {
-		if ( GameMain.Instance.m_GameState == GameState.INGAME ) { 
+		if ( GameMain.Instance.m_GameState == GameState.INGAME ||
+		    GameMain.Instance.m_GameState == GameState.READY ) { 
 			GameMain.Instance.PauseGame();
 		}	
 	}
