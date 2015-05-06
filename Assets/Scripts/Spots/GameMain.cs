@@ -184,14 +184,7 @@ public class GameMain : Fibra {
 
 	public void WrongSpot() {
 		GameMain.Instance.m_TimeLimit -= 1.0f;
-
 		TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
-		//StartCoroutine(WaitWrongSpot());
-	}
-
-	public IEnumerator WaitWrongSpot() {
-		yield return new WaitForSeconds(2.5f);
-		DestroyObject(m_BackGround.GetComponent<TweenColor>());
 	}
 
 	public void ShowResult() {
