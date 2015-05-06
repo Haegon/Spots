@@ -95,4 +95,22 @@ public class TweenColor : UITweener
 		}
 		return comp;
 	}
+
+	static public TweenColor Begin3 (GameObject go, float duration, Color from, Color to)
+	{
+		TweenColor comp = UITweener.Begin<TweenColor>(go, duration);
+		comp.from = from;
+		comp.to = to;
+		comp.style = Style.Once;
+
+		comp.animationCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.5f, 1f), new Keyframe(1f, 0f));
+		
+		if (duration <= 0f)
+		{
+			comp.Sample(1f, true);
+			comp.enabled = false;
+		}
+		return comp;
+	}
+
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using System.IO;
 using System.Text;
@@ -51,7 +51,6 @@ public class GameMain : Fibra {
 
 	int SX = Screen.width;
 	int SY = Screen.height;
-	GUIStyle tStyle = new GUIStyle();
 	GUIStyle cStyle = new GUIStyle();
 
 	[HideInInspector]
@@ -60,6 +59,8 @@ public class GameMain : Fibra {
 	public UISlider m_Slider;
 	[HideInInspector]
 	public UISprite m_SliderSprite;
+	[HideInInspector]
+	public GameObject m_BackGround;
 	[HideInInspector]
 	public UIToggle m_OptionBGM;
 	[HideInInspector]
@@ -86,6 +87,7 @@ public class GameMain : Fibra {
 
 		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
 		m_SliderSprite = GameObject.Find("FG").GetComponent<UISprite>();
+		m_BackGround = GameObject.Find("BackGround_Game");
 		m_OptionBGM = GameObject.Find("Option_BGM").GetComponent<UIToggle>();
 		m_OptionSound = GameObject.Find("Option_Sound").GetComponent<UIToggle>();
 
@@ -178,6 +180,18 @@ public class GameMain : Fibra {
 		GUI_Mgr.Instance.GoHome();
 
 		m_GameState = GameState.HOME;
+	}
+
+	public void WrongSpot() {
+		GameMain.Instance.m_TimeLimit -= 1.0f;
+
+		TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
+		//StartCoroutine(WaitWrongSpot());
+	}
+
+	public IEnumerator WaitWrongSpot() {
+		yield return new WaitForSeconds(2.5f);
+		DestroyObject(m_BackGround.GetComponent<TweenColor>());
 	}
 
 	public void ShowResult() {

@@ -4,25 +4,31 @@ using System.Collections;
 public class ButtonHandlerInGame : MonoBehaviour {
 
 	public void Button_Spot() {
-		if ( GameMain.Instance.m_GameState == GameState.READY ) { 
-			if ( GameMain.Instance.m_Count == 0 ) {
-				GameMain.Instance.StartGame();
+		switch ( GameMain.Instance.m_GameState ) {
+		case GameState.READY :
+			if ( GameMain.Instance.m_Count == (int)ColorEx.GetRainbow(this.gameObject.name)) {
+				Debug.Log("@@@@@@");
 				GameMain.Instance.m_Count ++;
-				GameMain.Instance.RePositionSpots();
+			} else {
+				GameMain.Instance.WrongSpot();
 			}
-		}
+			GameMain.Instance.StartGame();
+			break;
 
-		if ( GameMain.Instance.m_GameState == GameState.INGAME ) { 
+		case GameState.INGAME :
 			if ( GameMain.Instance.m_Count % 7 == (int)ColorEx.GetRainbow(this.gameObject.name) ) {
 				if ( GameMain.Instance.m_Count % 7 == (int)Rainbow.VIOLET ) {
 					GameMain.Instance.m_TimeLimit += 2.0f;
 				}
 				GameMain.Instance.m_Count ++;
-				GameMain.Instance.RePositionSpots();
 			} else {
-				GameMain.Instance.m_TimeLimit -= 1.0f;
+				GameMain.Instance.WrongSpot();
 			}
+			break;
 		} 
+
+
+		GameMain.Instance.RePositionSpots();	
 	}
 	
 	public void Button_Home() {
