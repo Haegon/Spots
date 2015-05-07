@@ -4,6 +4,8 @@ using System.Collections;
 
 public class MakePNG : MonoBehaviour {
 
+	const int p = 2;
+
 	// Use this for initialization
 	void Start () {
 		Save(720,1280);
@@ -24,18 +26,20 @@ public class MakePNG : MonoBehaviour {
 
 		for (int i = 0 ; i < width ; i++ ) {
 			for (int j = 0 ; j < height ; j++ ) {
-				int b1 = width/9*2;
-				int b2 = width-width/9*2;
+				int b1 = width/9*3;
+				int b2 = width - b1;
 				int distance;
-				int standard = width/9*2;
+				int standard = b1;
 
 				float a;
 				if ( i < b1 ) {
 					distance = Mathf.Abs(i - b1);
-					a = (float)Mathf.Pow(distance,2)/(float)Mathf.Pow(standard,2);
+					a = (float)Mathf.Pow(distance,p)/(float)Mathf.Pow(standard,p);
+					if ( i == 0 )
+					Debug.Log(a.ToString());
 				} else if ( i > b2 ){
 					distance = Mathf.Abs(i - b2);
-					a = (float)Mathf.Pow(distance,2)/(float)Mathf.Pow(standard,2);
+					a = (float)Mathf.Pow(distance,p)/(float)Mathf.Pow(standard,p);
 				} else {
 					a = 0.0f;
 				}
@@ -47,18 +51,18 @@ public class MakePNG : MonoBehaviour {
 		
 		for (int i = 0 ; i < width ; i++ ) {
 			for (int j = 0 ; j < height ; j++ ) {
-				int b1 = height/16*2;
-				int b2 = height-height/16*2;
+				int b1 = height/16*5;
+				int b2 = height - b1;
 				int distance;
-				int standard = height/16*2;
+				int standard = b1;
 				
 				float a;
 				if ( j < b1 ) {
 					distance = Mathf.Abs(j - b1);
-					a = (float)Mathf.Pow(distance,2)/(float)Mathf.Pow(standard,2);
+					a = (float)Mathf.Pow(distance,p)/(float)Mathf.Pow(standard,p);
 				} else if ( j > b2 ){
 					distance = Mathf.Abs(j - b2);
-					a = (float)Mathf.Pow(distance,2)/(float)Mathf.Pow(standard,2);
+					a = (float)Mathf.Pow(distance,p)/(float)Mathf.Pow(standard,p);
 				} else {
 					a = 0.0f;
 				}
@@ -68,7 +72,10 @@ public class MakePNG : MonoBehaviour {
 		
 		for (int i = 0 ; i < width ; i++ ) {
 			for (int j = 0 ; j < height ; j++ ) { 
-				newTexture.SetPixel(i,j, new Color(1.0f,1.0f,1.0f,(array1[i,j]+array2[i,j])/2.0f));
+
+				if ( i == 0 && j == 640 ) 
+					Debug.Log(((array1[i,j]+array2[i,j])/2.0f).ToString());
+				newTexture.SetPixel(i,j, new Color(1.0f,1.0f,1.0f,(array1[i,j]+array2[i,j])));
 			}
 		}
 
