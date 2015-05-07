@@ -3,13 +3,17 @@ using System.Collections;
 
 public class ButtonHandlerInGame : MonoBehaviour {
 
+	public AudioClip rightClip;
+	public AudioClip wrongClip;
+
 	public void Button_Spot() {
 		switch ( GameMain.Instance.m_GameState ) {
 		case GameState.READY :
 			if ( GameMain.Instance.m_Count == (int)ColorEx.GetRainbow(this.gameObject.name)) {
-				Debug.Log("@@@@@@");
 				GameMain.Instance.m_Count ++;
+				audio.PlayOneShot(rightClip);
 			} else {
+				audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
 			}
 			GameMain.Instance.StartGame();
@@ -21,7 +25,9 @@ public class ButtonHandlerInGame : MonoBehaviour {
 					GameMain.Instance.m_TimeLimit += 2.0f;
 				}
 				GameMain.Instance.m_Count ++;
+				audio.PlayOneShot(rightClip);
 			} else {
+				audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
 			}
 			break;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using GoogleMobileAds.Api;
 
 public class GameMain : Fibra {
 
@@ -97,16 +98,25 @@ public class GameMain : Fibra {
 		GoHome();
 
 #if !UNITY_EDITOR
-		PlayGamesPlatform.DebugLogEnabled = true;
-		PlayGamesPlatform.Activate();
-		Social.localUser.Authenticate((bool success) => {
-			if ( success ) {
-
-			} else {
-				PlayGamesPlatform.Instance.SignOut();
-			}
-		});
+//		PlayGamesPlatform.DebugLogEnabled = true;
+//		PlayGamesPlatform.Activate();
+//		Social.localUser.Authenticate((bool success) => {
+//			if ( success ) {
+//
+//			} else {
+//				PlayGamesPlatform.Instance.SignOut();
+//			}
+//		});
 #endif
+
+		// Create a 320x50 banner at the top of the screen.
+		BannerView bannerView = new BannerView(
+			"ca-app-pub-4566735050109706/3877683272", AdSize.Banner, AdPosition.Bottom);
+		// Create an empty ad request.
+		AdRequest request = new AdRequest.Builder().Build();
+		// Load the banner with the request.
+		bannerView.LoadAd(request);
+
 		cStyle.normal.textColor = Color.black;
 		cStyle.alignment = TextAnchor.MiddleRight;
 		cStyle.fontSize = 80*Screen.height/720;
@@ -218,9 +228,7 @@ public class GameMain : Fibra {
 		GUI_Mgr.Instance.ResumeGame();
 		
 		Time.timeScale = 1;
-
-		if ( m_Count > 0 ) m_GameState = GameState.INGAME;
-		else m_GameState = GameState.READY;
+		m_GameState = GameState.INGAME;
 	}
 	
 	public void Option() {

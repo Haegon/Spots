@@ -2,7 +2,9 @@ fileFormatVersion: 2
 guid: e7d0e64fd60bb4de1a08f0ba43f7a479
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - rightClip: {fileID: 8300000, guid: 0d4dd9963e6404706b13e55a381c55cc, type: 3}
+  - wrongClip: {fileID: 8300000, guid: c451774ff6f444f1abdae15a67dc85de, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
