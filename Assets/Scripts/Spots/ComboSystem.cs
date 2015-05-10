@@ -21,8 +21,10 @@ public class ComboSystem : MonoBehaviour {
 
 	public void ComboCheck(GameObject target, int count = 1)
 	{
-		//TODO: pause 상태일때 콤버가 끊길듯. TimeManager를 만들어서 해결해야 할듯.
-		if(m_curCombo == 0 || Time.realtimeSinceStartup - m_prevComboTime <= m_comboDuration)
+		Debug.Log("cur : " + Time.time);
+		Debug.Log("pre : " + m_prevComboTime);
+
+		if(m_curCombo == 0 || Time.time - m_prevComboTime <= m_comboDuration)
 			Combo(target, count);
 		else
 			Miss();
@@ -32,11 +34,11 @@ public class ComboSystem : MonoBehaviour {
 	void Combo(GameObject target, int count = 1)
 	{
 		m_curCombo += count;
+		m_prevComboTime = Time.time;
 
 		if(m_curCombo < m_effectStartNum)
 			return;
 
-		m_prevComboTime = Time.realtimeSinceStartup;
 		GameObject combo = GameObject.Instantiate(m_comboObject) as GameObject;
 
 		combo.transform.parent = target.transform.parent;
