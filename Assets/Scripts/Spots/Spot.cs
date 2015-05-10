@@ -8,8 +8,8 @@ public class Spot : MonoBehaviour {
 	GameObject child;
 	int offSet = 5;
 	//magic.
-	int ingameWidth = 412; 
-	int ingameHeight = 726;
+	int ingameWidth = 720; 
+	int ingameHeight = 1280;
 
 	UISprite sprite;
 
@@ -46,7 +46,7 @@ public class Spot : MonoBehaviour {
 			float x = ingameWidth/2 - sprite.width/2;
 			float y = ingameHeight/2 - sprite.height/2;
 
-			Vector3 v = new Vector3(Random.Range(-x, x),Random.Range(-y, y - 80),0);
+			Vector3 v = new Vector3(Random.Range(-x, x),Random.Range(-y, y - 100),0);
 			if ( checkFar(gos,v) ) {
 				transform.localPosition = v;
 				break;	
