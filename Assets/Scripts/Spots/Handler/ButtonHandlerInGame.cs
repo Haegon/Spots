@@ -11,10 +11,10 @@ public class ButtonHandlerInGame : MonoBehaviour {
 		case GameState.READY :
 			if ( GameMain.Instance.m_Count == (int)ColorEx.GetRainbow(this.gameObject.name)) {
 //				GameMain.Instance.m_Count ++;
-				GameMain.Instance.OneShot(this.gameObject);
-				audio.PlayOneShot(rightClip);
+				GameMain.Instance.Spot(this.gameObject);
+				Camera.main.audio.PlayOneShot(rightClip);
 			} else {
-				audio.PlayOneShot(wrongClip);
+				Camera.main.audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
 			}
 			GameMain.Instance.StartGame();
@@ -26,10 +26,10 @@ public class ButtonHandlerInGame : MonoBehaviour {
 					GameMain.Instance.m_TimeLimit += 2.0f;
 				}
 //				GameMain.Instance.m_Count ++;
-				GameMain.Instance.OneShot(this.gameObject);
-				audio.PlayOneShot(rightClip);
+				GameMain.Instance.Spot(this.gameObject);
+				Camera.main.audio.PlayOneShot(rightClip);
 			} else {
-				audio.PlayOneShot(wrongClip);
+				Camera.main.audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
 			}
 			break;

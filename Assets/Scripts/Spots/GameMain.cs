@@ -196,7 +196,7 @@ public class GameMain : Fibra {
 		m_GameState = GameState.HOME;
 	}
 
-	public void OneShot(GameObject target)
+	public void Spot(GameObject target)
 	{
 		m_Count++;
 		m_Combo.ComboCheck(target);
