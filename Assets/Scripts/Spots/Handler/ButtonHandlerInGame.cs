@@ -10,7 +10,8 @@ public class ButtonHandlerInGame : MonoBehaviour {
 		switch ( GameMain.Instance.m_GameState ) {
 		case GameState.READY :
 			if ( GameMain.Instance.m_Count == (int)ColorEx.GetRainbow(this.gameObject.name)) {
-				GameMain.Instance.m_Count ++;
+//				GameMain.Instance.m_Count ++;
+				GameMain.Instance.OneShot(this.gameObject);
 				audio.PlayOneShot(rightClip);
 			} else {
 				audio.PlayOneShot(wrongClip);
@@ -24,7 +25,8 @@ public class ButtonHandlerInGame : MonoBehaviour {
 				if ( GameMain.Instance.m_Count % 7 == (int)Rainbow.VIOLET ) {
 					GameMain.Instance.m_TimeLimit += 2.0f;
 				}
-				GameMain.Instance.m_Count ++;
+//				GameMain.Instance.m_Count ++;
+				GameMain.Instance.OneShot(this.gameObject);
 				audio.PlayOneShot(rightClip);
 			} else {
 				audio.PlayOneShot(wrongClip);

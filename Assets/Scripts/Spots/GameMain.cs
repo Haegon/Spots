@@ -67,6 +67,8 @@ public class GameMain : Fibra {
 	[HideInInspector]
 	public UIToggle m_OptionSound;
 
+	public ComboSystem m_Combo;
+
 	void Awake () {
 		System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
 	}
@@ -120,6 +122,8 @@ public class GameMain : Fibra {
 		cStyle.normal.textColor = Color.black;
 		cStyle.alignment = TextAnchor.MiddleRight;
 		cStyle.fontSize = 80*Screen.height/720;
+
+		m_Combo = this.gameObject.AddComponent<ComboSystem>();
 
 		isInitialize = true;
 	}
@@ -192,9 +196,16 @@ public class GameMain : Fibra {
 		m_GameState = GameState.HOME;
 	}
 
+	public void OneShot(GameObject target)
+	{
+		m_Count++;
+		m_Combo.ComboCheck(target);
+	}
+
 	public void WrongSpot() {
 		GameMain.Instance.m_TimeLimit -= 1.0f;
 		TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
+		m_Combo.Miss();
 	}
 
 	public void ShowResult() {
