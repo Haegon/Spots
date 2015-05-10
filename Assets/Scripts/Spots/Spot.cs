@@ -6,6 +6,10 @@ public class Spot : MonoBehaviour {
 	private Color startColor;
 	private float timeNow;
 	GameObject child;
+	int offSet = 5;
+	//magic.
+	int ingameWidth = 412; 
+	int ingameHeight = 726;
 
 	UISprite sprite;
 
@@ -39,9 +43,12 @@ public class Spot : MonoBehaviour {
 
 		GameObject[] gos = GameObject.FindGameObjectsWithTag("spot");
 		for (;;) {
-			Vector3 v = new Vector3(Random.Range(-0.4f,0.4f),Random.Range(-0.7f,0.7f),0);
+			float x = ingameWidth/2 - sprite.width/2;
+			float y = ingameHeight/2 - sprite.height/2;
+
+			Vector3 v = new Vector3(Random.Range(-x, x),Random.Range(-y, y - 80),0);
 			if ( checkFar(gos,v) ) {
-				transform.position = v;
+				transform.localPosition = v;
 				break;	
 			}
 		}
@@ -50,7 +57,7 @@ public class Spot : MonoBehaviour {
 	bool checkFar(GameObject[] gos, Vector3 v) {
 		foreach ( GameObject go in gos ) {
 			if ( go.name == gameObject.name ) continue;
-				if ( Vector3.Distance(v,go.transform.position) < 0.2f ) {
+			if ( Vector3.Distance(v,go.transform.localPosition) < sprite.width + offSet ) {
 					return false;
 			}
 		}
