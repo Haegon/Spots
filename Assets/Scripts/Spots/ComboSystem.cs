@@ -43,7 +43,7 @@ public class ComboSystem : MonoBehaviour {
 
 		combo.transform.parent = target.transform.parent;
 		combo.transform.position = target.transform.position;
-		combo.transform.localScale = Vector3.one;
+		combo.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
 
 		combo.transform.FindChild("label").GetComponent<UILabel>().text = "x " + m_curCombo.ToString();
 
