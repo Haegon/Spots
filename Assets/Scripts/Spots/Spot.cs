@@ -12,9 +12,11 @@ public class Spot : MonoBehaviour {
 	int ingameHeight = 1280;
 
 	UISprite sprite;
+	ParticleSystem particle;
 
 	void Start () {
 		child = gameObject.GetComponentInChildren<UISprite>().gameObject;
+		particle = gameObject.GetComponentInChildren<ParticleSystem>();
 		sprite = child.GetComponent<UISprite>();
 		sprite.color = ColorEx.SpotColor(gameObject.name);
 		startColor = ColorEx.SpotColor(gameObject.name);
@@ -24,6 +26,7 @@ public class Spot : MonoBehaviour {
 		
 	void Update () {
 		sprite.color = ColorEx.SpotColor(gameObject.name);
+		particle.startColor = ColorEx.SpotColor(gameObject.name);
 		if ( Time.time > timeNow + GameMain.Instance.m_TimeSpan && GameMain.Instance.m_GameState == GameState.INGAME ) {
 			RePositionSpot();
 		}

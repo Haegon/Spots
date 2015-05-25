@@ -97,7 +97,8 @@ public class GameMain : Fibra {
 		m_OptionBGM.value = m_PlayerData.BGM;
 		m_OptionSound.value = m_PlayerData.Sound;
 
-		GoHome();
+		GoIntro();
+//		GoHome();
 
 #if !UNITY_EDITOR
 //		PlayGamesPlatform.DebugLogEnabled = true;
@@ -188,6 +189,12 @@ public class GameMain : Fibra {
 		
 		m_StartTime = Time.time;
 		m_GameState = GameState.INGAME;
+	}
+
+	public void GoIntro() {
+		GUI_Mgr.Instance.GoIntro();
+
+		m_GameState = GameState.INTRO;
 	}
 
 	public void GoHome() {

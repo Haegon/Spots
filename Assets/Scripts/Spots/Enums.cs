@@ -2,6 +2,7 @@
 using System.Collections;
 
 public enum GameState {
+	INTRO,
 	HOME,
 	READY,
 	INGAME,

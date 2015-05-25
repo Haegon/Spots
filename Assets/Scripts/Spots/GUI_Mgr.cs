@@ -41,8 +41,18 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects.Add(GameState.FINISH,GameObject.Find("ResultUI"));
 		gameObjects.Add(GameState.PAUSE,GameObject.Find("PauseUI"));
 		gameObjects.Add(GameState.OPTION,GameObject.Find("OptionUI"));
+		gameObjects.Add(GameState.INTRO,GameObject.Find("IntroUI"));
 
 		isInitialize = true;
+	}
+
+	public void GoIntro() {
+		gameObjects[GameState.HOME].SetActive(false);	
+		gameObjects[GameState.INGAME].SetActive(false);	
+		gameObjects[GameState.FINISH].SetActive(false);	
+		gameObjects[GameState.PAUSE].SetActive(false);	
+		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(true);	
 	}
 
 	public void NewGame() {
@@ -51,6 +61,7 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(false);	
 		gameObjects[GameState.PAUSE].SetActive(false);	
 		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 	
 	public void GoHome() {
@@ -59,6 +70,7 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(false);	
 		gameObjects[GameState.PAUSE].SetActive(false);	
 		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 	
 	public void ShowResult() {
@@ -67,6 +79,7 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(true);	
 		gameObjects[GameState.PAUSE].SetActive(false);	
 		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 	
 	public void PauseGame() {
@@ -75,6 +88,7 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(false);	
 		gameObjects[GameState.PAUSE].SetActive(true);	
 		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 	
 	public void ResumeGame() {
@@ -83,6 +97,7 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(false);	
 		gameObjects[GameState.PAUSE].SetActive(false);	
 		gameObjects[GameState.OPTION].SetActive(false);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 
 	public void Option() {
@@ -91,5 +106,6 @@ public class GUI_Mgr : MonoBehaviour {
 		gameObjects[GameState.FINISH].SetActive(false);	
 		gameObjects[GameState.PAUSE].SetActive(false);	
 		gameObjects[GameState.OPTION].SetActive(true);	
+		gameObjects[GameState.INTRO].SetActive(false);	
 	}
 }
