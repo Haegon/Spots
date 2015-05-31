@@ -68,6 +68,11 @@ public class GameMain : Fibra {
 	public UIToggle m_OptionSound;
 
 	public ComboSystem m_Combo;
+	public int m_CycleCount;
+
+	public int bonusTime = 10;
+	public int leastTimeLimit = 5;
+
 
 	void Awake () {
 		System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
@@ -158,12 +163,14 @@ public class GameMain : Fibra {
 	}
 
 	void CountDown() {
-		if ( Time.time - m_StartTime > m_TimeLimit ) { 
+//		if ( Time.time - m_StartTime > m_TimeLimit ) { 
+		if( m_DeadLine < 0) {
 			m_DeadLine = 0;
 			m_Slider.value = 0;
 			ShowResult();		
 		} else {
-			m_DeadLine = m_TimeLimit - (Time.time - m_StartTime);
+//			m_DeadLine = m_TimeLimit - (Time.time - m_StartTime);
+			m_DeadLine -= Time.deltaTime;
 			ShowSlider();
 		}
 	}
@@ -178,6 +185,7 @@ public class GameMain : Fibra {
 		m_Count = 0;
 		m_TimeLimit = m_StaticTimeLimit;
 		m_DeadLine = m_StaticTimeLimit;
+		m_CycleCount = 0;
 
 		GUI_Mgr.Instance.NewGame();
 		ShowSlider();
@@ -254,7 +262,23 @@ public class GameMain : Fibra {
 		
 		m_GameState = GameState.OPTION;
 	}
-	
+
+	public void OneCycle()
+	{
+		m_DeadLine += bonusTime;
+		m_CycleCount += 1;
+		
+		if(m_TimeLimit > leastTimeLimit)
+		{
+			m_TimeLimit -= 1.0f;
+
+			if(m_DeadLine > m_TimeLimit)
+			{
+				m_DeadLine = m_TimeLimit;
+			}
+		}
+	}
+
 	public void RePositionSpots() {
 		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
 			kvp.Value.transform.position = new Vector3(-1000,-1000,0);

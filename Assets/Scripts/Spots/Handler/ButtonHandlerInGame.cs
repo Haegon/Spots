@@ -23,7 +23,7 @@ public class ButtonHandlerInGame : MonoBehaviour {
 		case GameState.INGAME :
 			if ( GameMain.Instance.m_Count % 7 == (int)ColorEx.GetRainbow(this.gameObject.name) ) {
 				if ( GameMain.Instance.m_Count % 7 == (int)Rainbow.VIOLET ) {
-					GameMain.Instance.m_TimeLimit += 2.0f;
+					GameMain.Instance.OneCycle();
 				}
 //				GameMain.Instance.m_Count ++;
 				GameMain.Instance.Spot(this.gameObject);
