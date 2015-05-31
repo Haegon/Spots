@@ -26,15 +26,14 @@ public class Spot : MonoBehaviour {
 
 	public IEnumerator Fever()
 	{
-		int rainbow = (int)ColorEx.GetRainbow(this.gameObject.name);
+		Rainbow rainbow = ColorEx.GetRainbow(this.gameObject.name);
 
 		while(GameMain.Instance.isFeverTime)
 		{
-			if(++rainbow == 7)
-				rainbow = 0;
+			rainbow = ColorEx.Next(rainbow);
 
-			sprite.color = ColorEx.GetColor((Rainbow)rainbow);
-			particle.startColor = ColorEx.GetColor((Rainbow)rainbow);
+			sprite.color = ColorEx.GetColor(rainbow);
+			particle.startColor = ColorEx.GetColor(rainbow);
 			yield return new WaitForSeconds(0.1f);
 		}
 	}

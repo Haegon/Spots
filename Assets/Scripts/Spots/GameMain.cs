@@ -195,7 +195,7 @@ public class GameMain : Fibra {
 			m_FeverSprite.fillAmount -= Time.deltaTime / (float)m_FeverTime;
 		}
 		else
-			m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
+			m_SliderSprite.color = ColorEx.GetColor(m_curRainbow);
 	}
 
 	public void NewGame() {
