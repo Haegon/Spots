@@ -7,6 +7,14 @@ public class ButtonHandlerInGame : MonoBehaviour {
 	public AudioClip wrongClip;
 
 	void OnClick() {
+
+		if ( this.gameObject.name == "Button_Spot_Gold" ) {
+			if ( GameMain.Instance.m_GameState == GameState.READY )
+				GameMain.Instance.StartGame();
+			GameMain.Instance.GetGold();
+			return;
+		}
+
 		switch ( GameMain.Instance.m_GameState ) {
 		case GameState.READY :
 			if ( GameMain.Instance.m_curRainbow == ColorEx.GetRainbow(this.gameObject.name)) {

@@ -57,6 +57,8 @@ public class GameMain : Fibra {
 	[HideInInspector]
 	public Dictionary<Rainbow,GameObject> spotObjects = new Dictionary<Rainbow, GameObject>();
 	[HideInInspector]
+	public GameObject m_GoldObject;
+	[HideInInspector]
 	public UISlider m_Slider;
 	[HideInInspector]
 	public UISprite m_SliderSprite;
@@ -100,6 +102,7 @@ public class GameMain : Fibra {
 			spotObjects.Add(ColorEx.GetRainbow(go.name), go);
 		}
 
+		m_GoldObject = GameObject.Find("Button_Spot_Gold");
 		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
 		m_SliderSprite = GameObject.Find("FG").GetComponent<UISprite>();
 		m_FeverSprite = GameObject.Find("fever").GetComponent<UISprite>();
@@ -352,10 +355,15 @@ public class GameMain : Fibra {
 		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
 			kvp.Value.transform.position = new Vector3(-1000,-1000,0);
 		}
-
+		
 		foreach ( KeyValuePair<Rainbow,GameObject> kvp in spotObjects ) {
 			kvp.Value.GetComponent<Spot>().RePositionSpot();
 		}
+	}
+	
+	public void GetGold() {
+		m_PlayerData.Gold ++;
+		m_GoldObject.GetComponent<Gold>().RePositionGold();
 	}
 	
 	void ShowUI() {

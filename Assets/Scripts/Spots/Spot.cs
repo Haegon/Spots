@@ -58,15 +58,15 @@ public class Spot : MonoBehaviour {
 
 	public void RePositionSpot() {
 		timeNow = Time.time;
-
+		
 		Random.seed = Utils.GetRandomNumber(1,100000);
 		//TweenColor.Begin2(child,1.0f,startColor,Color.white);
-
+		
 		GameObject[] gos = GameObject.FindGameObjectsWithTag("spot");
 		for (;;) {
 			float x = ingameWidth/2 - sprite.width/2;
 			float y = ingameHeight/2 - sprite.height/2;
-
+			
 			Vector3 v = new Vector3(Random.Range(-x, x),Random.Range(-y, y - 100),0);
 			if ( checkFar(gos,v) ) {
 				transform.localPosition = v;
@@ -74,14 +74,20 @@ public class Spot : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	bool checkFar(GameObject[] gos, Vector3 v) {
 		foreach ( GameObject go in gos ) {
 			if ( go.name == gameObject.name ) continue;
 			if ( Vector3.Distance(v,go.transform.localPosition) < sprite.width + offSet ) {
-					return false;
+				return false;
 			}
+			//if ( Vector3.Distance(v,GameMain.Instance.m_GoldObject.transform.localPosition) < sprite.width + offSet ) {
+			//	return false;
+			//}
 		}
+		//if ( Vector3.Distance(v,GameMain.Instance.m_GoldObject.transform.localPosition) < sprite.width + offSet ) {
+		//	return false;
+		//}
 		return true;
 	}
 }
