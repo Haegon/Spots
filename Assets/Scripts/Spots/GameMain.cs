@@ -108,8 +108,8 @@ public class GameMain : Fibra {
 		m_OptionBGM = GameObject.Find("Option_BGM").GetComponent<UIToggle>();
 		m_OptionSound = GameObject.Find("Option_Sound").GetComponent<UIToggle>();
 
-		m_OptionBGM.value = m_PlayerData.BGM;
-		m_OptionSound.value = m_PlayerData.Sound;
+		m_OptionBGM.value = m_PlayerData.BGM.ToBool();
+		m_OptionSound.value = m_PlayerData.Sound.ToBool();
 
 		GoIntro();
 //		GoHome();
@@ -283,9 +283,11 @@ public class GameMain : Fibra {
 	}
 
 	public void WrongSpot() {
-		GameMain.Instance.m_TimeLimit -= 1.0f;
-		TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
-		m_Combo.Miss();
+		ShowResult();
+		m_GameState = GameState.FINISH;
+		//GameMain.Instance.m_TimeLimit -= 1.0f;
+		//TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
+		//m_Combo.Miss();
 	}
 
 	public void ShowResult() {
@@ -364,65 +366,29 @@ public class GameMain : Fibra {
 	}
 
 	PlayerData Load() {
-		if ( !File.Exists(Application.persistentDataPath + "/config.gd" ) ) return new PlayerData();
-		try
-		{
-			byte[] dc = ByteIO.FileToByteArray(Application.persistentDataPath + "/config.gd");
+	
+		PlayerData pd = new PlayerData();
 
-			if ( dc.Length > 0 ) {
-
-				string json_str = ByteToString(dc);
-				
-				Dictionary<string,object> json_obj = Json.Deserialize(json_str) as Dictionary<string,object>;
-
-				PlayerData pd = new PlayerData();
-
-				pd.BGM = (bool)json_obj["bgm"];
-				pd.Sound = (bool)json_obj["sound"];
-				pd.Top = (int)json_obj["top"];
-
-				return pd;
-			}
-		}
-		catch ( FileNotFoundException e)
-		{
-				return new PlayerData();
-		}
-		return new PlayerData();
+		pd.BGM = PlayerPrefs.GetInt("bgm");
+		pd.Sound = PlayerPrefs.GetInt("sound");
+		pd.Top = PlayerPrefs.GetInt("top");
+		pd.Gold = PlayerPrefs.GetInt("gold");
+		return pd;
 	}
 
 	public void Save() {
-		Dictionary<string, object> dic = new Dictionary<string, object>();
-		
-		dic.Add("bgm",m_PlayerData.BGM);
-		dic.Add("sound",m_PlayerData.Sound);
-		dic.Add("top", m_PlayerData.Top);
-
-		// 암호화 하여 파일 쓰기에 성공했다면 listener call
-		if ( ByteIO.ByteArrayToFile(Application.persistentDataPath + "/config.gd", StringToByte(Json.Serialize(dic))  ) )
-		{
-
-		}
+	
+		PlayerPrefs.SetInt("bgm",m_PlayerData.BGM);
+		PlayerPrefs.SetInt("sound",m_PlayerData.Sound);
+		PlayerPrefs.SetInt("top",m_PlayerData.Top);
+		PlayerPrefs.SetInt("gold",m_PlayerData.Gold);
 	}
-
-	// 바이트 배열을 String으로 변환 
-	private string ByteToString(byte[] strByte) 
-	{ 
-		string str = Encoding.Default.GetString(strByte); 
-		return str; 
-	}
-	// String을 바이트 배열로 변환 
-	private byte[] StringToByte(string str)
-	{
-		byte[] StrByte = Encoding.UTF8.GetBytes(str); 
-		return StrByte; 
-	}
-
 }
 
 [SerializeField]
 public class PlayerData {
-	public bool BGM = true ;
-	public bool Sound = true ;
+	public int BGM = 1 ; // 1ㅇㅣㅁㅕㄴ ㅈㅐㅅㅐㅇ 0ㅇㅣㅁㅕㄴ ㅇㅏㄴㅈㅐㅅㅐㅇ
+	public int Sound = 1 ;
 	public int Top = 0;
+	public int Gold = 0;
 }

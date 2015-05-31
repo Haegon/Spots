@@ -13,11 +13,12 @@ public class ButtonHandlerInGame : MonoBehaviour {
 //				GameMain.Instance.m_Count ++;
 				GameMain.Instance.Spot(this.gameObject);
 				Camera.main.audio.PlayOneShot(rightClip);
+				GameMain.Instance.StartGame();
 			} else {
 				Camera.main.audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
+				GameMain.Instance.RePositionSpots();
 			}
-			GameMain.Instance.StartGame();
 			break;
 
 		case GameState.INGAME :
@@ -33,15 +34,13 @@ public class ButtonHandlerInGame : MonoBehaviour {
 //				GameMain.Instance.m_Count ++;
 				GameMain.Instance.Spot(this.gameObject);
 				Camera.main.audio.PlayOneShot(rightClip);
+				GameMain.Instance.RePositionSpots();
 			} else {
 				Camera.main.audio.PlayOneShot(wrongClip);
 				GameMain.Instance.WrongSpot();
 			}
 			break;
 		} 
-
-
-		GameMain.Instance.RePositionSpots();	
 	}
 	
 	public void Button_Home() {
@@ -53,7 +52,7 @@ public class ButtonHandlerInGame : MonoBehaviour {
 
 	public void Button_Retry() {
 		if ( GameMain.Instance.m_GameState == GameState.FINISH ||
-		    GameMain.Instance.m_GameState == GameState.PAUSE) { 
+		    GameMain.Instance.m_GameState == GameState.PAUSE ) { 
 			GameMain.Instance.NewGame();
 		}	
 	}
