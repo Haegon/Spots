@@ -37,7 +37,7 @@ public class Sound_Mgr : Fibra {
 	// Update is called once per frame
 	void Update () {
 		if ( isInitialize ) {
-			if ( GameMain.Instance.m_PlayerData.BGM ) {
+			if ( GameMain.Instance.m_PlayerData.BGM.ToBool()) {
 				soundObjects["home"].volume = 1;
 				soundObjects["game"].volume = 1;
 			} else {
