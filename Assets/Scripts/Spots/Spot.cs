@@ -17,16 +17,35 @@ public class Spot : MonoBehaviour {
 	void Start () {
 		child = gameObject.GetComponentInChildren<UISprite>().gameObject;
 		particle = gameObject.GetComponentInChildren<ParticleSystem>();
+		particle.startColor = ColorEx.SpotColor(gameObject.name);
 		sprite = child.GetComponent<UISprite>();
 		sprite.color = ColorEx.SpotColor(gameObject.name);
 		startColor = ColorEx.SpotColor(gameObject.name);
 		RePositionSpot();
 	}
 
-		
-	void Update () {
+	public IEnumerator Fever()
+	{
+		int rainbow = (int)ColorEx.GetRainbow(this.gameObject.name);
+
+		while(GameMain.Instance.isFeverTime)
+		{
+			if(++rainbow == 7)
+				rainbow = 0;
+
+			sprite.color = ColorEx.GetColor((Rainbow)rainbow);
+			particle.startColor = ColorEx.GetColor((Rainbow)rainbow);
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
+
+	public void EndFever()
+	{
 		sprite.color = ColorEx.SpotColor(gameObject.name);
 		particle.startColor = ColorEx.SpotColor(gameObject.name);
+	}
+		
+	void Update () {
 		if ( Time.time > timeNow + GameMain.Instance.m_TimeSpan && GameMain.Instance.m_GameState == GameState.INGAME ) {
 			RePositionSpot();
 		}

@@ -73,6 +73,13 @@ public class GameMain : Fibra {
 	public int bonusTime = 10;
 	public int leastTimeLimit = 5;
 
+	public int m_MaxFever = 15;
+	int m_FeverValue = 0;
+	public int m_FeverTime = 3;
+	public bool isFeverTime = false;
+	UISprite m_FeverSprite;
+	public Rainbow m_curRainbow;
+
 
 	void Awake () {
 		System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
@@ -95,6 +102,8 @@ public class GameMain : Fibra {
 
 		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
 		m_SliderSprite = GameObject.Find("FG").GetComponent<UISprite>();
+		m_FeverSprite = GameObject.Find("fever").GetComponent<UISprite>();
+		Debug.LogError(m_FeverSprite);
 		m_BackGround = GameObject.Find("BackGround_Game");
 		m_OptionBGM = GameObject.Find("Option_BGM").GetComponent<UIToggle>();
 		m_OptionSound = GameObject.Find("Option_Sound").GetComponent<UIToggle>();
@@ -167,6 +176,7 @@ public class GameMain : Fibra {
 		if( m_DeadLine < 0) {
 			m_DeadLine = 0;
 			m_Slider.value = 0;
+			m_FeverSprite.fillAmount = 1;
 			ShowResult();		
 		} else {
 //			m_DeadLine = m_TimeLimit - (Time.time - m_StartTime);
@@ -177,7 +187,15 @@ public class GameMain : Fibra {
 
 	public void ShowSlider() {
 		m_Slider.value = m_DeadLine / m_TimeLimit;
-		m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
+//		m_Fever.fillAmount = m_DeadLine / m_TimeLimit;
+
+		if(isFeverTime)
+		{
+			m_SliderSprite.color = ColorEx.GetColor((Rainbow)(Time.time * 10 % 7));
+			m_FeverSprite.fillAmount -= Time.deltaTime / (float)m_FeverTime;
+		}
+		else
+			m_SliderSprite.color = ColorEx.GetColor((Rainbow)(m_Count%7));
 	}
 
 	public void NewGame() {
@@ -186,6 +204,10 @@ public class GameMain : Fibra {
 		m_TimeLimit = m_StaticTimeLimit;
 		m_DeadLine = m_StaticTimeLimit;
 		m_CycleCount = 0;
+		m_FeverValue = 0;
+		m_FeverSprite.fillAmount = 0;
+
+		m_curRainbow = Rainbow.RED;
 
 		GUI_Mgr.Instance.NewGame();
 		ShowSlider();
@@ -213,8 +235,51 @@ public class GameMain : Fibra {
 
 	public void Spot(GameObject target)
 	{
+		if(!isFeverTime)
+			m_curRainbow = ColorEx.Next(m_curRainbow);
+
 		m_Count++;
 		m_Combo.ComboCheck(target);
+	}
+
+	public void Fever()
+	{
+		if(!isFeverTime)
+		{
+			m_FeverValue ++;
+			
+			m_FeverSprite.fillAmount = 1.0f/(float)m_MaxFever * (float)m_FeverValue;
+			Debug.LogError(1.0f/(float)m_MaxFever * (float)m_FeverValue);
+
+			if(m_FeverValue == m_MaxFever)
+				StartFever();
+		}
+	}
+
+	void StartFever()
+	{
+		isFeverTime = true;
+		foreach(var pair in spotObjects)
+		{
+			pair.Value.GetComponent<Spot>().StartCoroutine("Fever");
+		}
+
+		StartCoroutine(FeverTime());
+	}
+
+	IEnumerator FeverTime()
+	{
+		yield return new WaitForSeconds(m_FeverTime);
+
+		foreach(var pair in spotObjects)
+		{
+			pair.Value.GetComponent<Spot>().EndFever();
+		}
+
+		RePositionSpots();
+
+		m_FeverValue = 0;
+		isFeverTime = false;
 	}
 
 	public void WrongSpot() {

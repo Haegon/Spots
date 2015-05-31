@@ -10,7 +10,7 @@ public class ComboSystem : MonoBehaviour {
 	//마지막 콤버 시간.
 	float m_prevComboTime;
 	//몇초동안 콤버 지속.
-	int m_comboDuration = 2;
+	float m_comboDuration = 1.5f;
 	//콤버 이펙트를 몇부터 보여줄까.
 	int m_effectStartNum = 2;
 
@@ -38,6 +38,8 @@ public class ComboSystem : MonoBehaviour {
 
 		if(m_curCombo < m_effectStartNum)
 			return;
+
+		GameMain.Instance.Fever();
 
 		GameObject combo = GameObject.Instantiate(m_comboObject) as GameObject;
 

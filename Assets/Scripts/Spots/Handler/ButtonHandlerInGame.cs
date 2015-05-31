@@ -6,10 +6,10 @@ public class ButtonHandlerInGame : MonoBehaviour {
 	public AudioClip rightClip;
 	public AudioClip wrongClip;
 
-	public void Button_Spot() {
+	void OnClick() {
 		switch ( GameMain.Instance.m_GameState ) {
 		case GameState.READY :
-			if ( GameMain.Instance.m_Count == (int)ColorEx.GetRainbow(this.gameObject.name)) {
+			if ( GameMain.Instance.m_curRainbow == ColorEx.GetRainbow(this.gameObject.name)) {
 //				GameMain.Instance.m_Count ++;
 				GameMain.Instance.Spot(this.gameObject);
 				Camera.main.audio.PlayOneShot(rightClip);
@@ -21,8 +21,13 @@ public class ButtonHandlerInGame : MonoBehaviour {
 			break;
 
 		case GameState.INGAME :
-			if ( GameMain.Instance.m_Count % 7 == (int)ColorEx.GetRainbow(this.gameObject.name) ) {
-				if ( GameMain.Instance.m_Count % 7 == (int)Rainbow.VIOLET ) {
+			if(GameMain.Instance.isFeverTime)
+			{
+				GameMain.Instance.Spot(this.gameObject);
+				Camera.main.audio.PlayOneShot(rightClip);
+			}
+			else if ( GameMain.Instance.m_curRainbow == ColorEx.GetRainbow(this.gameObject.name) ) {
+				if ( GameMain.Instance.m_curRainbow == Rainbow.VIOLET ) {
 					GameMain.Instance.OneCycle();
 				}
 //				GameMain.Instance.m_Count ++;

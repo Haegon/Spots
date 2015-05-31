@@ -100,4 +100,14 @@ public class ColorEx {
 			break;
 		}
 	}
+
+	public static Rainbow Next(Rainbow rainbow)
+	{
+		int intRain = (int)rainbow;
+
+		if(++intRain == 7)
+			intRain = 0;
+
+		return (Rainbow)intRain;
+	}
 }
