@@ -103,7 +103,7 @@ public class GameMain : Fibra {
 		m_Slider = GameObject.Find("LeftTime").GetComponent<UISlider>();
 		m_SliderSprite = GameObject.Find("FG").GetComponent<UISprite>();
 		m_FeverSprite = GameObject.Find("fever").GetComponent<UISprite>();
-		Debug.LogError(m_FeverSprite);
+	
 		m_BackGround = GameObject.Find("BackGround_Game");
 		m_OptionBGM = GameObject.Find("Option_BGM").GetComponent<UIToggle>();
 		m_OptionSound = GameObject.Find("Option_Sound").GetComponent<UIToggle>();
@@ -199,6 +199,8 @@ public class GameMain : Fibra {
 	}
 
 	public void NewGame() {
+		GUI_Mgr.Instance.NewGame();
+
 		Time.timeScale = 1.0f;
 		m_Count = 0;
 		m_TimeLimit = m_StaticTimeLimit;
@@ -209,7 +211,6 @@ public class GameMain : Fibra {
 
 		m_curRainbow = Rainbow.RED;
 
-		GUI_Mgr.Instance.NewGame();
 		ShowSlider();
 
 		m_GameState = GameState.READY;
@@ -284,6 +285,7 @@ public class GameMain : Fibra {
 
 	public void WrongSpot() {
 		ShowResult();
+		RePositionSpots();
 		m_GameState = GameState.FINISH;
 		//GameMain.Instance.m_TimeLimit -= 1.0f;
 		//TweenColor.Begin3(m_BackGround,0.5f,Color.white,Color.red);
