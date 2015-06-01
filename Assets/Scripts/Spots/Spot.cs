@@ -60,8 +60,7 @@ public class Spot : MonoBehaviour {
 		timeNow = Time.time;
 		
 		Random.seed = Utils.GetRandomNumber(1,100000);
-		//TweenColor.Begin2(child,1.0f,startColor,Color.white);
-		
+
 		GameObject[] gos = GameObject.FindGameObjectsWithTag("spot");
 		for (;;) {
 			float x = ingameWidth/2 - sprite.width/2;
@@ -81,13 +80,11 @@ public class Spot : MonoBehaviour {
 			if ( Vector3.Distance(v,go.transform.localPosition) < sprite.width + offSet ) {
 				return false;
 			}
-			//if ( Vector3.Distance(v,GameMain.Instance.m_GoldObject.transform.localPosition) < sprite.width + offSet ) {
-			//	return false;
-			//}
 		}
-		//if ( Vector3.Distance(v,GameMain.Instance.m_GoldObject.transform.localPosition) < sprite.width + offSet ) {
-		//	return false;
-		//}
+		GameObject gold = GameObject.FindGameObjectWithTag("gold");
+		if ( Vector3.Distance(v,gold.transform.localPosition) < sprite.width + offSet ) {
+			return false;
+		}
 		return true;
 	}
 }
