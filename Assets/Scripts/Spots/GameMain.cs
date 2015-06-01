@@ -29,7 +29,7 @@ public class GameMain : Fibra {
 	}
 
 	[HideInInspector]
-	public GameState m_GameState = GameState.HOME;
+	public GameState m_GameState = GameState.INTRO;
 
 	[HideInInspector]
 	public float m_StartTime = 0.0f;
@@ -41,8 +41,10 @@ public class GameMain : Fibra {
 	public float m_TimeSpan;// = 1.0f;
 	[HideInInspector]
 	public float m_DeadLine;// = 30.0f;
-	[HideInInspector]
-	public int m_Count = 0;
+
+	int m_Count = 0;
+	int m_Gold = 0;
+
 	[HideInInspector]
 	public int m_TopCount = 0;
 	[HideInInspector]
@@ -53,6 +55,7 @@ public class GameMain : Fibra {
 	int SX = Screen.width;
 	int SY = Screen.height;
 	GUIStyle cStyle = new GUIStyle();
+	GUIStyle gStyle = new GUIStyle();
 
 	[HideInInspector]
 	public Dictionary<Rainbow,GameObject> spotObjects = new Dictionary<Rainbow, GameObject>();
@@ -137,9 +140,13 @@ public class GameMain : Fibra {
 		// Load the banner with the request.
 		bannerView.LoadAd(request);
 
-		cStyle.normal.textColor = Color.black;
+		cStyle.normal.textColor = Color.white;
 		cStyle.alignment = TextAnchor.MiddleRight;
-		cStyle.fontSize = 80*Screen.height/720;
+		cStyle.fontSize = 30*Screen.height/720;
+
+		gStyle.normal.textColor = Color.yellow;
+		gStyle.alignment = TextAnchor.MiddleLeft;
+		gStyle.fontSize = 30*Screen.height/720;
 
 		m_Combo = this.gameObject.AddComponent<ComboSystem>();
 
@@ -206,6 +213,7 @@ public class GameMain : Fibra {
 
 		Time.timeScale = 1.0f;
 		m_Count = 0;
+		m_Gold = 0;
 		m_TimeLimit = m_StaticTimeLimit;
 		m_DeadLine = m_StaticTimeLimit;
 		m_CycleCount = 0;
@@ -302,10 +310,12 @@ public class GameMain : Fibra {
 		top.text = m_PlayerData.Top.ToString();
 		m_GameState = GameState.FINISH;
 
+		m_PlayerData.Gold += m_Gold;
+
 		if ( m_Count > m_PlayerData.Top ) {
 			m_PlayerData.Top = m_Count;
-			Save();
 		}
+		Save();
 #if !UNITY_EDITOR
 		Social.ReportScore(m_Count, "CgkItIOIzdQOEAIQAQ", (bool success) => {
 			// handle success or failure
@@ -360,21 +370,28 @@ public class GameMain : Fibra {
 	}
 	
 	public void GetGold() {
-		m_PlayerData.Gold ++;
+		m_Gold ++;
 		m_GoldObject.GetComponent<Gold>().RePositionGold();
 	}
 	
-	void ShowUI() {
-		GUI.Label(new Rect(SX/2, 0, SX/2, SY/10), string.Format("{0:D}",m_Count), cStyle);
+	void ShowInGameUI() {
+		GUI.Label(new Rect(SX/4*3, 0, SX/4, SY/15), string.Format("{0:D}",m_Count), cStyle);
+		GUI.Label(new Rect(SX/4*3, 0, SX/4, SY/15), string.Format("{0:D}",m_Gold), gStyle);
 	}
-
+	
+	void ShowHomeUI() {
+		GUI.Label(new Rect(SX/2, 0, SX/2, SY/15), string.Format("Gold : {0:D}",m_PlayerData.Gold), gStyle);
+	}
+	
 	void OnGUI () {
+		if (m_GameState == GameState.HOME )
+			ShowHomeUI();
+
 		if ( m_GameState == GameState.INGAME || m_GameState == GameState.READY)
-			ShowUI();	
+			ShowInGameUI();	
 	}
 
 	PlayerData Load() {
-	
 		PlayerData pd = new PlayerData();
 
 		pd.BGM = PlayerPrefs.GetInt("bgm");
@@ -385,7 +402,6 @@ public class GameMain : Fibra {
 	}
 
 	public void Save() {
-	
 		PlayerPrefs.SetInt("bgm",m_PlayerData.BGM);
 		PlayerPrefs.SetInt("sound",m_PlayerData.Sound);
 		PlayerPrefs.SetInt("top",m_PlayerData.Top);
