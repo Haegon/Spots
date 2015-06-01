@@ -253,8 +253,6 @@ public class GameMain : Fibra {
 			m_FeverValue ++;
 			
 			m_FeverSprite.fillAmount = 1.0f/(float)m_MaxFever * (float)m_FeverValue;
-			Debug.LogError(1.0f/(float)m_MaxFever * (float)m_FeverValue);
-
 			if(m_FeverValue == m_MaxFever)
 				StartFever();
 		}

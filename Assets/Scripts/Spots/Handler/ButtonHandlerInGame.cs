@@ -33,6 +33,7 @@ public class ButtonHandlerInGame : MonoBehaviour {
 			{
 				GameMain.Instance.Spot(this.gameObject);
 				Camera.main.audio.PlayOneShot(rightClip);
+				GameMain.Instance.RePositionSpots();
 			}
 			else if ( GameMain.Instance.m_curRainbow == ColorEx.GetRainbow(this.gameObject.name) ) {
 				if ( GameMain.Instance.m_curRainbow == Rainbow.VIOLET ) {

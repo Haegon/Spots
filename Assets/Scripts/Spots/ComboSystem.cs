@@ -21,9 +21,6 @@ public class ComboSystem : MonoBehaviour {
 
 	public void ComboCheck(GameObject target, int count = 1)
 	{
-		Debug.Log("cur : " + Time.time);
-		Debug.Log("pre : " + m_prevComboTime);
-
 		if(m_curCombo == 0 || Time.time - m_prevComboTime <= m_comboDuration)
 			Combo(target, count);
 		else
